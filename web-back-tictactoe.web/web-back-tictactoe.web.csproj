@@ -15,7 +15,6 @@
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="Views\Shared\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
