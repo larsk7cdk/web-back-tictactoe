@@ -13,6 +13,9 @@ namespace web_back_tictactoe.web
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                .CaptureStartupErrors(true)
+                .PreferHostingUrls(true)
+                .UseUrls("http://localhost:5000")
                 .UseStartup<Startup>();
         }
     }
