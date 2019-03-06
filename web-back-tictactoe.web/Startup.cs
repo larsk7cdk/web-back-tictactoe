@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using web_back_tictactoe.web.Extensions;
 using web_back_tictactoe.web.Services;
 
 namespace web_back_tictactoe.web
@@ -25,6 +26,8 @@ namespace web_back_tictactoe.web
                 app.UseExceptionHandler("/Home/Error");
 
             app.UseStaticFiles();
+
+            app.UseCommunicationMiddleware();
 
             app.UseMvc(routes =>
             {
