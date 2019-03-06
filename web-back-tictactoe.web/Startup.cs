@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using web_back_tictactoe.web.Extensions;
@@ -11,8 +12,6 @@ namespace web_back_tictactoe.web
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -21,7 +20,6 @@ namespace web_back_tictactoe.web
             services.AddSingleton<IUserService, UserService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -49,7 +47,12 @@ namespace web_back_tictactoe.web
             });
             var newUserRoutes = routeBuilder.Build();
             app.UseRouter(newUserRoutes);
-            
+
+            // This redelegate http://localhost:5000/newuser to UserRegistration/Index. Shortcut
+            var options = new RewriteOptions()
+                .AddRewrite("newuser", "/UserRegistration/Index", false);
+            app.UseRewriter(options);
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
