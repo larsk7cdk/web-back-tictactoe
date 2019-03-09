@@ -32,6 +32,8 @@ namespace web_back_tictactoe.web
 
             app.UseStaticFiles();
 
+            app.UseWebSockets();
+
             app.UseCommunicationMiddleware();
 
             // Call UserRegistration with dedicated route
