@@ -29,6 +29,7 @@ namespace TicTacToe.Middlewares
             var email = context.Request.Query["email"];
             var user = _userService.GetUserByEmail(email).Result;
 
+
             if (string.IsNullOrEmpty(email))
             {
                 await context.Response.WriteAsync("BadRequest:Email is required!");
@@ -36,8 +37,6 @@ namespace TicTacToe.Middlewares
             else if ((await _userService.GetUserByEmail(email)).IsEmailConfirmed)
             {
                 await context.Response.WriteAsync("OK");
-                //await context.Response.WriteAsync("WaitingForEmailConfirmation");
-
             }
             else
             {
