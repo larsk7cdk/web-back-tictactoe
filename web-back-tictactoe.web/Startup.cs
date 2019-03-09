@@ -23,7 +23,10 @@ namespace web_back_tictactoe.web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
             else
                 app.UseExceptionHandler("/Home/Error");
 
@@ -42,7 +45,7 @@ namespace web_back_tictactoe.web
                 var password = context.Request.Query["password"];
                 var userService = context.RequestServices.GetService<IUserService>();
                 userService.RegisterUser(new UserModel
-                    {FirstName = firstName, LastName = lastName, Email = email, Password = password});
+                { FirstName = firstName, LastName = lastName, Email = email, Password = password });
                 return context.Response.WriteAsync($"User {firstName} {lastName} has been sucessfully created.");
             });
             var newUserRoutes = routeBuilder.Build();
