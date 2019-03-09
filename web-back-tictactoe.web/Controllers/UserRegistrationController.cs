@@ -45,9 +45,9 @@ namespace web_back_tictactoe.web.Controllers
             }
 
             ViewBag.Email = email;
-            user.IsEmailConfirmed = true;
-            user.EmailConfirmationDate = DateTime.Now;
-            await _userService.UpdateUser(user);
+            //user.IsEmailConfirmed = true;
+            //user.EmailConfirmationDate = DateTime.Now;
+            //await _userService.UpdateUser(user);
 
             return View();
         }

@@ -45,5 +45,11 @@
     <script src="~/lib/jquery/jquery.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.js"></script>
     <script src="~/js/site.js"></script>
+
+    @RenderSection("Scripts", required: false)
+    <environment include="Development">
+        <script src="~/app/js/scripts1.js"></script>
+        <script src="~/app/js/scripts2.js"></script>
+    </environment>
 </body>
 </html>
