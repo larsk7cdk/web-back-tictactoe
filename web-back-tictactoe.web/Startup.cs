@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
@@ -17,6 +18,11 @@ namespace web_back_tictactoe.web
             services.AddMvc();
             services.AddRouting();
 
+            services.AddSession(x =>
+            {
+                x.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+
             services.AddSingleton<IUserService, UserService>();
         }
 
@@ -31,6 +37,7 @@ namespace web_back_tictactoe.web
                 app.UseExceptionHandler("/Home/Error");
 
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseWebSockets();
 

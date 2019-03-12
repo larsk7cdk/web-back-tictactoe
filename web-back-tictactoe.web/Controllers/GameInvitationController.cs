@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web_back_tictactoe.web.Models;
 using web_back_tictactoe.web.Services;
@@ -16,9 +16,10 @@ namespace web_back_tictactoe.web.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(string email)
+        public IActionResult Index(string email)
         {
             var gameInvitationModel = new GameInvitationModel { InvitedBy = email };
+            HttpContext.Session.SetString("email", "email");
             return View(gameInvitationModel);
         }
     }

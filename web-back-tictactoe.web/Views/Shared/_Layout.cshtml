@@ -27,6 +27,34 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                            <div class="dropdown-menu">
+                                <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                <div class="dropdown-menu">
+                            </div>
+
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                            </div>
+                        </li>
+
+                        @*<li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings<span class="caret"></span></a>
+            <ul class="dropdown-menu multi-level">
+                <li class="dropdown-submenu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Select your language (@ViewBag.Language)<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li @(ViewBag.Language == "DA" ? "active" : "")><a asp-controller="Home" asp-action="SetCulture" asp-route-culture="DA">Danish</a></li>
+                        <li @(ViewBag.Language == "EN" ? "active" : "")><a asp-controller="Home" asp-action="SetCulture" asp-route-culture="EN">English</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>*@
                     </ul>
                 </div>
             </div>
