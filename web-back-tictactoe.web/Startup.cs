@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using web_back_tictactoe.web.Extensions;
@@ -19,7 +19,10 @@ namespace web_back_tictactoe.web
         {
             services.AddLocalization(options => options.ResourcesPath = "Localization");
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
+                    options => options.ResourcesPath = "Localization")
+                .AddDataAnnotationsLocalization();
             services.AddRouting();
 
             services.AddSession(x => { x.IdleTimeout = TimeSpan.FromMinutes(30); });
@@ -57,7 +60,7 @@ namespace web_back_tictactoe.web
                 var password = context.Request.Query["password"];
                 var userService = context.RequestServices.GetService<IUserService>();
                 userService.RegisterUser(new UserModel
-                { FirstName = firstName, LastName = lastName, Email = email, Password = password });
+                    {FirstName = firstName, LastName = lastName, Email = email, Password = password});
                 return context.Response.WriteAsync($"User {firstName} {lastName} has been sucessfully created.");
             });
             var newUserRoutes = routeBuilder.Build();
