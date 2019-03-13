@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,13 +17,12 @@ namespace web_back_tictactoe.web
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalization(options => options.ResourcesPath = "Localization");
+
             services.AddMvc();
             services.AddRouting();
 
-            services.AddSession(x =>
-            {
-                x.IdleTimeout = TimeSpan.FromMinutes(30);
-            });
+            services.AddSession(x => { x.IdleTimeout = TimeSpan.FromMinutes(30); });
 
             services.AddSingleton<IUserService, UserService>();
         }
@@ -34,7 +35,9 @@ namespace web_back_tictactoe.web
                 app.UseBrowserLink();
             }
             else
+            {
                 app.UseExceptionHandler("/Home/Error");
+            }
 
             app.UseStaticFiles();
             app.UseSession();
@@ -60,10 +63,26 @@ namespace web_back_tictactoe.web
             var newUserRoutes = routeBuilder.Build();
             app.UseRouter(newUserRoutes);
 
-            // This redelegate http://localhost:5000/newuser to UserRegistration/Index. Shortcut
-            var options = new RewriteOptions()
-                .AddRewrite("newuser", "/UserRegistration/Index", false);
-            app.UseRewriter(options);
+            //// This redelegate http://localhost:5000/newuser to UserRegistration/Index. Shortcut
+            //var options = new RewriteOptions()
+            //    .AddRewrite("newuser", "/UserRegistration/Index", false);
+            //app.UseRewriter(options);
+
+            // Localication Middlewares
+            var supportedCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("da-DK"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            };
+
+            localizationOptions.RequestCultureProviders.Clear();
+            localizationOptions.RequestCultureProviders.Add(new CultureProviderResolverService());
+
+            app.UseRequestLocalization(localizationOptions);
+            // Localication Middlewares
+
 
             app.UseMvc(routes =>
             {

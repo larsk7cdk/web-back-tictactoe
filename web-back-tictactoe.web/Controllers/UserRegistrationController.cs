@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web_back_tictactoe.web.Models;
 using web_back_tictactoe.web.Services;
@@ -17,6 +17,9 @@ namespace web_back_tictactoe.web.Controllers
 
         public IActionResult Index()
         {
+            var culture = Request.HttpContext.Session.GetString("culture");
+            ViewBag.Language = culture;
+
             return View();
         }
 

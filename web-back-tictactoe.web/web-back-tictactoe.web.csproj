@@ -5,6 +5,7 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>web_back_tictactoe.web</RootNamespace>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+    <AssemblyName>web_back_tictactoe.web</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
