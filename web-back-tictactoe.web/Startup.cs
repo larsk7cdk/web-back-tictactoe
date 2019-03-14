@@ -6,15 +6,24 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using web_back_tictactoe.web.Extensions;
 using web_back_tictactoe.web.Models;
+using web_back_tictactoe.web.Options;
 using web_back_tictactoe.web.Services;
 
 namespace web_back_tictactoe.web
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLocalization(options => options.ResourcesPath = "Localization");
@@ -26,6 +35,9 @@ namespace web_back_tictactoe.web
             services.AddRouting();
 
             services.AddSession(x => { x.IdleTimeout = TimeSpan.FromMinutes(30); });
+
+            services.Configure<EmailServiceOptions>(Configuration.GetSection("Email"));
+            services.AddSingleton<IEmailService, EmailService>();
 
             services.AddSingleton<IUserService, UserService>();
         }
@@ -60,7 +72,7 @@ namespace web_back_tictactoe.web
                 var password = context.Request.Query["password"];
                 var userService = context.RequestServices.GetService<IUserService>();
                 userService.RegisterUser(new UserModel
-                    {FirstName = firstName, LastName = lastName, Email = email, Password = password});
+                { FirstName = firstName, LastName = lastName, Email = email, Password = password });
                 return context.Response.WriteAsync($"User {firstName} {lastName} has been sucessfully created.");
             });
             var newUserRoutes = routeBuilder.Build();
