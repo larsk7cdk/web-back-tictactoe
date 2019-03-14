@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Logging;
 using web_back_tictactoe.web.Models;
 using web_back_tictactoe.web.Services;
 
@@ -10,13 +11,16 @@ namespace web_back_tictactoe.web.Controllers
 {
     public class UserRegistrationController : Controller
     {
-        private readonly IUserService _userService;
         private readonly IEmailService _emailService;
+        private readonly ILogger<UserRegistrationController> _logger;
+        private readonly IUserService _userService;
 
-        public UserRegistrationController(IUserService userService, IEmailService emailService)
+        public UserRegistrationController(IUserService userService, IEmailService emailService,
+            ILogger<UserRegistrationController> logger)
         {
             _userService = userService;
             _emailService = emailService;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -33,7 +37,7 @@ namespace web_back_tictactoe.web.Controllers
             if (ModelState.IsValid)
             {
                 await _userService.RegisterUser(userModel);
-                return RedirectToAction(nameof(EmailConfirmation), new { userModel.Email });
+                return RedirectToAction(nameof(EmailConfirmation), new {userModel.Email});
 
                 //return Content($"User {userModel.FirstName} {userModel.LastName} has been registered sucessfully");
             }
@@ -44,12 +48,13 @@ namespace web_back_tictactoe.web.Controllers
         [HttpGet]
         public async Task<IActionResult> EmailConfirmation(string email)
         {
+            _logger.LogInformation($"##Start## Email confirmation process for {email}");
             var user = await _userService.GetUserByEmail(email);
             var urlAction = new UrlActionContext
             {
                 Controller = "UserRegistration",
                 Action = "ConfirmEmail",
-                Values = new { email },
+                Values = new {email},
                 Host = Request.Host.ToString(),
                 Protocol = Request.Scheme
             };
@@ -63,13 +68,9 @@ namespace web_back_tictactoe.web.Controllers
             }
             catch (Exception e)
             {
-                
             }
 
-            if (user?.IsEmailConfirmed == true)
-            {
-                return RedirectToAction("Index", "GameInvitation", new { email = email });
-            }
+            if (user?.IsEmailConfirmed == true) return RedirectToAction("Index", "GameInvitation", new {email});
 
             ViewBag.Email = email;
             //user.IsEmailConfirmed = true;
