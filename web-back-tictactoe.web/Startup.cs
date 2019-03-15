@@ -17,31 +17,42 @@ namespace web_back_tictactoe.web
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            this.Configuration = configuration;
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IConfiguration _configuration { get; }
+        public IHostingEnvironment _hostingEnvironment { get; }
+
+        public void ConfigureCommonServices(IServiceCollection services)
         {
             services.AddLocalization(options => options.ResourcesPath = "Localization");
-
             services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
-                    options => options.ResourcesPath = "Localization")
-                .AddDataAnnotationsLocalization();
-            services.AddRouting();
-
-            services.AddSession(x => { x.IdleTimeout = TimeSpan.FromMinutes(30); });
-
-            services.Configure<EmailServiceOptions>(Configuration.GetSection("Email"));
-            services.AddSingleton<IEmailService, EmailService>();
-
+                    options => options.ResourcesPath = "Localization").AddDataAnnotationsLocalization();
             services.AddSingleton<IUserService, UserService>();
-
             services.AddSingleton<IGameInvitationService, GameInvitationService>();
+            services.Configure<EmailServiceOptions>(_configuration.GetSection("Email"));
+            services.AddEmailService(_hostingEnvironment, _configuration);
+            services.AddRouting();
+            services.AddSession(o => { o.IdleTimeout = TimeSpan.FromMinutes(30); });
+        }
+
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            ConfigureCommonServices(services);
+        }
+
+        public void ConfigureStagingServices(IServiceCollection services)
+        {
+            ConfigureCommonServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            ConfigureCommonServices(services);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -74,7 +85,7 @@ namespace web_back_tictactoe.web
                 var password = context.Request.Query["password"];
                 var userService = context.RequestServices.GetService<IUserService>();
                 userService.RegisterUser(new UserModel
-                { FirstName = firstName, LastName = lastName, Email = email, Password = password });
+                    {FirstName = firstName, LastName = lastName, Email = email, Password = password});
                 return context.Response.WriteAsync($"User {firstName} {lastName} has been sucessfully created.");
             });
             var newUserRoutes = routeBuilder.Build();
