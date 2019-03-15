@@ -40,6 +40,8 @@ namespace web_back_tictactoe.web
             services.AddSingleton<IEmailService, EmailService>();
 
             services.AddSingleton<IUserService, UserService>();
+
+            services.AddSingleton<IGameInvitationService, GameInvitationService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
