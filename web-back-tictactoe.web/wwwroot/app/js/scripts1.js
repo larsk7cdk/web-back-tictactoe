@@ -16,7 +16,7 @@ function EmailConfirmation(email) {
 
 function GameInvitationConfirmation(id) {
     if (window.WebSocket) {
-        alert("Websockets are enabled");
+        // alert("Websockets are enabled");
         openSocket(id, "GameInvitation");
     } else {
         alert("Websockets are not enabled");
