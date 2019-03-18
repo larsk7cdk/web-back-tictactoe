@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using web_back_tictactoe.web.Extensions;
+using web_back_tictactoe.web.Filters;
 using web_back_tictactoe.web.Models;
 using web_back_tictactoe.web.Options;
 using web_back_tictactoe.web.Services;
@@ -29,9 +30,10 @@ namespace web_back_tictactoe.web
         public void ConfigureCommonServices(IServiceCollection services)
         {
             services.AddLocalization(options => options.ResourcesPath = "Localization");
-            services.AddMvc()
+            services.AddMvc(o => o.Filters.Add(typeof(DetectMobileFilter)))
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix,
                     options => options.ResourcesPath = "Localization").AddDataAnnotationsLocalization();
+
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IGameInvitationService, GameInvitationService>();
             services.Configure<EmailServiceOptions>(_configuration.GetSection("Email"));

@@ -1,7 +1,12 @@
 ﻿@{
     ViewData["Title"] = "EmailConfirmation";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@section Desktop{
+    <h2>@Localizer["DesktopTitle"]</h2> }
+
+@section Mobile{
+    <h2>@Localizer["MobileTitle"]</h2> }
 
 <h2>Email confirmation</h2>
 <p>
@@ -12,7 +17,7 @@
 @section Scripts
 {
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             EmailConfirmation('@ViewBag.Email');
         });
     </script>

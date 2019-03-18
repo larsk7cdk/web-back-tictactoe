@@ -52,8 +52,8 @@
     </header>
 
     <main class="container body-content">
-        @RenderSection("Desktop", false)
-        @{ IgnoreSection("Mobile");}
+        @RenderBody()@RenderSection("Mobile", false)
+        @{ IgnoreSection("Desktop");}
         @RenderBody()
     </main>
 
