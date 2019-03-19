@@ -27,7 +27,7 @@ namespace web_back_tictactoe.web.Controllers
             ViewBag.Language = culture;
 
             var gameInvitationModel = new GameInvitationModel {InvitedBy = email};
-            HttpContext.Session.SetString("email", "email");
+            HttpContext.Session.SetString("email", email);
             return View(gameInvitationModel);
         }
 

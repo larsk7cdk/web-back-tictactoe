@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Http
+@model web_back_tictactoe.web.Models.GameSessionModel
+@{
+    var email = Context.Session.GetString("email");
+}
+@if (Model.ActiveUser?.Email == email)
+{
+    <table>
+        @for (var rows = 0; rows < 3; rows++)
+        {
+            <tr style="height: 150px;">
+                @for (var columns = 0; columns < 3; columns++)
+                {
+                    <td style="border: 1px solid #808080; width: 150px;">
+                        @{
+                            var position = Model.Turns?.FirstOrDefault(turn => turn.X == columns && turn.Y == rows);
+
+                            if (position != null)
+                            {
+                                if (position.User?.Email == "Player1")
+                                {
+                                    <i class="glyphicon glyphicon-unchecked" style="height: 100%; width: 100%;"></i>
+                                }
+                                else
+                                {
+                                    <i class="glyphicon glyphicon-remove-circle" style="height: 100%; width: 100%;"></i>
+                                }
+                            }
+                            else
+                            {
+                                <a asp-action="SetPosition" asp-controller="GameSession" asp-route-id="@Model.Id" asp-route-email="@email" class="btn btn-danger" style="min-height: 150px; width: 150px;">
+                                    &nbsp;
+                                </a>
+                            }
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <div class="alert">
+        <i class="glyphicon glyphicon-alert">Please wait until the other user has finished his turn.</i>
+    </div>
+}

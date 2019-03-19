@@ -15,6 +15,8 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Index">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="InvitedBy" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="EmailTo" class="control-label"></label>

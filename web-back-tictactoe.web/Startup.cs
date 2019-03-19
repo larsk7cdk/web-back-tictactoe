@@ -20,12 +20,12 @@ namespace web_back_tictactoe.web
     {
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            _configuration = configuration;
-            _hostingEnvironment = hostingEnvironment;
+            Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
         }
 
-        public IConfiguration _configuration { get; }
-        public IHostingEnvironment _hostingEnvironment { get; }
+        public IConfiguration Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         public void ConfigureCommonServices(IServiceCollection services)
         {
@@ -36,8 +36,10 @@ namespace web_back_tictactoe.web
 
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IGameInvitationService, GameInvitationService>();
-            services.Configure<EmailServiceOptions>(_configuration.GetSection("Email"));
-            services.AddEmailService(_hostingEnvironment, _configuration);
+            services.AddSingleton<IGameSessionService, GameSessionService>();
+
+            services.Configure<EmailServiceOptions>(Configuration.GetSection("Email"));
+            services.AddEmailService(HostingEnvironment, Configuration);
             services.AddRouting();
             services.AddSession(o => { o.IdleTimeout = TimeSpan.FromMinutes(30); });
         }

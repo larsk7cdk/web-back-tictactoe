@@ -66,7 +66,7 @@ namespace web_back_tictactoe.web.Controllers
             {
                 _emailService.SendEmail(email, "Tic-Tac-Toe Email Confirmation", message).Wait();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 
